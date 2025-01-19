@@ -28,6 +28,11 @@ export type TokenPresale =
           "isSigner": true
         },
         {
+          "name": "target",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -265,6 +270,7 @@ export type TokenPresale =
   ]
 }
 
+
 export const IDL: TokenPresale =
 {
   "version": "0.1.0",
@@ -292,6 +298,11 @@ export const IDL: TokenPresale =
           "name": "buyer",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "target",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "systemProgram",

@@ -26,6 +26,11 @@
           "isSigner": true
         },
         {
+          "name": "target",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false

@@ -320,8 +320,6 @@ const usePresale = () => {
         owner: targetAccount
       });
       console.log('Expected owner (program ID):', program.programId.toBase58());
-      alert (TmonkMintAuthority.toString() );
-      alert (utils.token.ASSOCIATED_PROGRAM_ID.toString() );
 
       const tx = await program.methods
         .buyAndClaimToken(new BN(tokenAmount* decimals))
