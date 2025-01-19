@@ -262,17 +262,6 @@ const usePresale = () => {
       return null;
     }
   }, []);
-  const setCurrentPresaleInDB = useCallback(async (presaleIdentifier: number) => {
-    if (!wallet.publicKey) return;
-    try {
-
-      return response.data;
-    } catch (error) {
-      console.error('Error setting current presale in DB:', error);
-      return null;
-    }
-  }, [wallet.publicKey]);
-
   const getWithdrawableTokensAndSol = useCallback(async () => {
     // TODO: must get the withdrawable tokens and sol from the solana blockchain
     const currentPresaleInfo = await getCurrentPresaleFromDB();
@@ -282,194 +271,7 @@ const usePresale = () => {
     };
   }, [wallet.publicKey]);
 
-  const createAndStartPresale = useCallback(async (
-    presaleIdentifier: number,
-    tokenMintAddress: PublicKey,
-    softcapAmount: number,
-    hardcapAmount: number,
-    maxTokenAmountPerAddress: number,
-    minTokenAmountPerAddress: number,
-    pricePerToken: number,
-    startTime: number,
-    endTime: number,
-    decimals: number
-  ) => {
-    if (!program || !wallet.publicKey) return;
-    try {
-      setTransactionPending(true);
-      const [presaleInfoPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("PRESALE_SEED"), Buffer.from([presaleIdentifier])],
-        program.programId
-      );
-      
-      const softcapAmountBN = new BN(
-        (softcapAmount * Math.pow(10, decimals)).toString()
-      );
-      const hardcapAmountBN = new BN(
-        (hardcapAmount * Math.pow(10, decimals)).toString()
-      );
 
-      // Fetch SOL price from CoinGecko API
-      const solPriceResponse = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd');
-      const solPriceInUSD = solPriceResponse.data.solana.usd;
-
-      // Convert price to string to handle large numbers
-      const pricePerTokenInSOL = pricePerToken / solPriceInUSD;
-      const pricePerTokenInLamports = new BN(
-        Math.floor(pricePerTokenInSOL * LAMPORTS_PER_SOL)
-      );
-      alert(tokenMintAddress.toString());
-
-      console.log("Derived PDA:", presaleInfoPDA.toBase58());
-      const tx = await program.methods
-        .createAndStartPresale(
-          presaleIdentifier,
-          tokenMintAddress,
-          softcapAmountBN,
-          hardcapAmountBN,
-          new BN(maxTokenAmountPerAddress),
-          pricePerTokenInLamports, // Price per smallest token unit
-          new BN(startTime),
-          new BN(endTime),
-          decimals
-        )
-        .accounts({
-          presaleInfo: presaleInfoPDA,
-          tokenMint: tokenMintAddress,
-          authority: wallet.publicKey,
-          systemProgram: SystemProgram.programId,
-          tokenProgram: utils.token.TOKEN_PROGRAM_ID,
-          rent: web3.SYSVAR_RENT_PUBKEY,
-        })
-        .rpc();
-
-      const response = await axios.post('/api/presale', {
-        publicKey: wallet.publicKey.toString(),
-        presaleInfo: {
-          presaleIdentifier,
-          tokenMintAddress: tokenMintAddress.toString(),
-          softcapAmount,
-          hardcapAmount,
-          maxTokenAmountPerAddress,
-          minTokenAmountPerAddress,
-          pricePerToken,
-          startTime,
-          endTime,
-          decimals,
-          signature: tx,
-        },
-      });
-
-      if (!response.data.success) {
-        throw new Error(response.data.message || 'Failed to save presale information');
-      }
-
-      await fetchPresaleInfo();
-      setTransactionPending(false);
-      return { success: true, signature: tx };
-    } catch (error) {
-      console.error('Error creating and starting presale:', error);
-      setTransactionPending(false);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
-      };
-    }
-  }, [program, wallet.publicKey, fetchPresaleInfo]);
-
-  const depositToken = useCallback(async (amount: number) => {
-    if (!program || !wallet.publicKey) {
-      console.error("Program or wallet not initialized");
-      return { success: false, error: 'Program or wallet not initialized' };
-    }
-  
-    try {
-      setTransactionPending(true);
-      
-      // Calculate actual amount with decimals
-      const actualAmount = new BN(
-        (amount * Math.pow(10, decimals)).toString()
-      );
-
-      const [presaleInfoPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("PRESALE_SEED"), Buffer.from([presaleIdentifier])],
-        program.programId
-      );
-      const [presaleVaultPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("PRESALE_VAULT"), Buffer.from([presaleIdentifier])],
-        program.programId
-      );
-      const fromTokenAccount = await utils.token.associatedAddress({
-        mint: new PublicKey(TmonkMintAuthority),
-        owner: wallet.publicKey
-      });
-      const toTokenAccount = await utils.token.associatedAddress({
-        mint: new PublicKey(TmonkMintAuthority),
-        owner: presaleInfoPDA
-      });
-      const vaultInfo = await program.provider.connection.getAccountInfo(presaleVaultPDA);
-      const presaleInfo = await program.provider.connection.getAccountInfo(presaleInfoPDA);
-      console.log('PDAs:', {
-        presaleVaultPDA_owner: vaultInfo?.owner.toBase58(),
-        presaleInfoPDA_owner: presaleInfo?.owner.toBase58(), 
-        programId: program.programId.toBase58()
-      });
-      const tx = await program.methods
-        .depositToken(actualAmount)
-        .accounts({
-          mintAccount: new PublicKey(TmonkMintAuthority),
-          fromAssociatedTokenAccount: fromTokenAccount,
-          fromAuthority: wallet.publicKey,
-          toAssociatedTokenAccount: toTokenAccount,
-          presaleVault: presaleVaultPDA,
-          presaleInfo: presaleInfoPDA,
-          admin: wallet.publicKey,
-          rent: web3.SYSVAR_RENT_PUBKEY,
-          systemProgram: SystemProgram.programId,
-          tokenProgram: utils.token.TOKEN_PROGRAM_ID,
-          associatedTokenProgram: utils.token.ASSOCIATED_PROGRAM_ID,
-        })
-        .rpc();
-  
-      // Get current presale info before updating
-      const currentPresale = await axios.get(`/api/presale?publicKey=${wallet.publicKey.toString()}`);
-      const currentPresaleInfo = currentPresale.data?.presaleInfo || {};
-
-      // Update current presale info
-
-      
-      // // Update presale information with accumulated deposit amount
-      // await axios.post('/api/presale', {
-      //   publicKey: wallet.publicKey.toString(),
-      //   presaleInfo: {
-      //     ...currentPresaleInfo, // Keep all existing presale info
-      //     presaleIdentifier,
-      //     depositTokenAmount: (currentPresaleInfo.depositTokenAmount || 0) + amount,
-      //     signature: tx,
-      //     updatedAt: new Date(),
-      //   }
-      // });
-  
-      // Save token activity
-
-  
-
-  
-      await fetchPresaleInfo();
-      setTransactionPending(false);
-      return { success: true, signature: tx };
-    } catch (error) {
-      console.error('Error in depositToken:', error);
-      setTransactionPending(false);
-      return { 
-        success: false, 
-        error: error instanceof Error 
-          ? `Deposit failed: ${error.message}` 
-          : 'Unknown error occurred during deposit'
-      };
-    }
-  }, [program, wallet.publicKey, presaleIdentifier, fetchPresaleInfo, TmonkMintAuthority, decimals]);
- 
   const validatePresaleTime = (presaleInfo: any): boolean => {
     if (!presaleInfo) return false;
     
@@ -552,71 +354,6 @@ const usePresale = () => {
     }
   }, [program, wallet.publicKey, presaleInfo, presaleIdentifier, fetchPresaleInfo, fetchWalletBalance, fetchHoldingTokens, holdingTokens]);
 
-  const withdraw = useCallback(async (presaleIdentifier: number, amount: number, withdrawType: 'Sol' | 'Token') => {
-    if (!program || !wallet.publicKey) return;
-
-    try {
-      setTransactionPending(true);
-      const [presaleInfoPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("PRESALE_SEED"), Buffer.from([presaleIdentifier])],
-        program.programId
-      );
-
-      const [presaleVaultPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("PRESALE_VAULT"), Buffer.from([presaleIdentifier])],
-        program.programId
-      );
-
-      const accounts: any = {
-        presaleInfo: presaleInfoPDA,
-        presaleVault: presaleVaultPDA,
-        admin: wallet.publicKey,
-        tokenMint: new PublicKey(TmonkMintAuthority),
-        presaleTokenAccount: await utils.token.associatedAddress({
-          mint: new PublicKey(TmonkMintAuthority),
-          owner: presaleInfoPDA
-        }),
-        adminTokenAccount: await utils.token.associatedAddress({
-          mint: new PublicKey(TmonkMintAuthority),
-          owner: wallet.publicKey
-        }),
-        systemProgram: SystemProgram.programId,
-        tokenProgram: utils.token.TOKEN_PROGRAM_ID,
-        associatedTokenProgram: utils.token.ASSOCIATED_PROGRAM_ID,
-      };
-       console.log('accounts', accounts);
-      let realAmount = new BN(0);
-      if (withdrawType === 'Token') {
-        realAmount = new BN(amount * Math.pow(10, decimals));
-      } else {
-        realAmount = new BN(amount * LAMPORTS_PER_SOL);
-      }
-
-      const tx = await program.methods
-        .withdraw(realAmount, { [withdrawType.toLowerCase()]: {} })
-        .accounts(accounts)
-        .rpc();
-
-      // After successful withdrawal, update the states
-      const withdrawableResponse = await getWithdrawableTokensAndSol();
-      setWithdrawableTokens(withdrawableResponse.TokenAmountFromSolana);
-      setWithdrawableSol(withdrawableResponse.SolTokenAmountFromSolana);
-
-
-      await fetchPresaleInfo();
-      if (withdrawType === 'Token') {
-        await fetchHoldingTokens();
-      } else {
-        await fetchWalletBalance();
-      }
-      setTransactionPending(false);
-      return { success: true, signature: tx };
-    } catch (error) {
-      console.error('Error withdrawing:', error);
-      setTransactionPending(false);
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
-    }
-  }, [program, wallet.publicKey, presaleInfo, fetchPresaleInfo, fetchHoldingTokens, fetchWalletBalance, getWithdrawableTokensAndSol]);
 
   useEffect(() => {
     if (program && wallet.publicKey) {
@@ -667,15 +404,11 @@ const usePresale = () => {
     walletBalance,
     holdingTokens,
     publicKey: wallet.publicKey,
-    createAndStartPresale,
-    depositToken,
     buyAndClaimToken,
-    withdraw,
     fetchPresaleInfo,
     fetchWalletBalance,
     fetchHoldingTokens,
     getCurrentPresaleFromDB,
-    setCurrentPresaleInDB,
     fetchPresaleInfoFromDB,
     walletConnected,
     transactionPending,
