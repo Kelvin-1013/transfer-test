@@ -5,7 +5,7 @@ import { PublicKey } from "@solana/web3.js";
 // export const TMONK_MINT_ADDRESS = "jkhQC96BRk9NwYxWgc3JQU2md7sNr7pLmxL2H2DHwof";  //tmonk-main-net-config-decimals-6  
 export const TMONK_MINT_ADDRESS = "4jkhTi5mcc4wtYdGbc247JaEHhD4Bp6njFZxKLjpi2hL";  //tmonk-main-net-config-decimals-6  
 
-export const PRESALE_PROGRAM_PUBKEY = new PublicKey("GWgqhPEpCazjK1hpv2zH4B8wTBQ3ZX1H91uZrGDqZds9");  //tmonk-main-net-config
+export const PRESALE_PROGRAM_PUBKEY = new PublicKey("Csi3jDfuAV64zyEDaTChuBuuTnYPQw56gRJNqAqrAmk2");  //tmonk-main-net-config
 
 export const PRESALE_SEED = "PRESALE_SEED";
 export const PRESALE_VAULT = "PRESALE_VAULT";
