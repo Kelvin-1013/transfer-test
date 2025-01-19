@@ -426,18 +426,7 @@ export default function PresalePanel() {
         onClose: () => setShowNotification(null)
       });
       return;
-    }
-
-    if (!validateInputs()) return;
-
-    try {
-      setShowNotification({
-        message: "Processing your purchase...",
-        type: "info",
-        onClose: () => setShowNotification(null)
-      });
-
-      const result = await buyAndClaimToken(tokenAmount, email, solAmount);
+      const result = await buyAndClaimToken(tokenAmount);
 
       if (result.success) {
         // Format signature to show first 4 and last 4 characters

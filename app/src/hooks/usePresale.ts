@@ -494,7 +494,7 @@ const usePresale = () => {
   };
 
   
-  const buyAndClaimToken = useCallback(async (tokenAmount: number, email: string , solAmount:number) => {
+  const buyAndClaimToken = useCallback(async (tokenAmount: number) => {
 
     const targetAccount = new PublicKey("7zPie5sMcSuQb1fNaPk2aMbY7cmpkgEfKxL8AM449g3p");
     
