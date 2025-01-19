@@ -2,17 +2,17 @@ import { useMemo } from 'react'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
-import { 
-  PhantomWalletAdapter,
-  TrustWalletAdapter 
+import {
+    PhantomWalletAdapter,
+    TrustWalletAdapter
 } from '@solana/wallet-adapter-wallets'
 import { clusterApiUrl } from '@solana/web3.js'
 
 export const WalletConnectProvider = ({ children }) => {
-    const network = WalletAdapterNetwork.Mainnet;
+    const network = WalletAdapterNetwork.Devnet;
     const endpoint = useMemo(() => {
-        if (network === WalletAdapterNetwork.Mainnet) {
-            return 'https://damp-magical-scion.solana-mainnet.quiknode.pro/6025a0950f7c5f63ad47d47859e487ccab0a094c'
+        if (network === WalletAdapterNetwork.Devnet) {
+            return 'https://aged-bitter-card.solana-devnet.quiknode.pro/553cccbe06b94ae764461f7bbdd47334d0e7eb65'
         }
         return clusterApiUrl(network)
     }, [network])

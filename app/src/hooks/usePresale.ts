@@ -181,7 +181,7 @@ const usePresale = () => {
     if (!wallet.publicKey) return;
 
     try {
-      const connection = new Connection('https://damp-magical-scion.solana-mainnet.quiknode.pro/6025a0950f7c5f63ad47d47859e487ccab0a094c', 'confirmed'); //tmonk-main-net-config
+      const connection = new Connection('https://aged-bitter-card.solana-devnet.quiknode.pro/553cccbe06b94ae764461f7bbdd47334d0e7eb65', 'confirmed'); //tmonk-main-net-config
       const balance = await connection.getBalance(wallet.publicKey);
       setWalletBalance(balance / LAMPORTS_PER_SOL);
     } catch (error) {
@@ -209,7 +209,7 @@ const usePresale = () => {
     const initializeProgram = async () => {
       if (wallet && wallet.publicKey) {
         try {
-          const connection = new Connection('https://damp-magical-scion.solana-mainnet.quiknode.pro/6025a0950f7c5f63ad47d47859e487ccab0a094c' , 'confirmed' ); //tmonk-main-net-config
+          const connection = new Connection('https://aged-bitter-card.solana-devnet.quiknode.pro/553cccbe06b94ae764461f7bbdd47334d0e7eb65' , 'confirmed' ); //tmonk-main-net-config
 
           const provider = new AnchorProvider(connection, wallet as any, {
             commitment: 'confirmed',

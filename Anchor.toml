@@ -10,11 +10,10 @@ presale = "8GuUDSZ8XiCxFL9cPjNeJdVedCx6JSsFknv6x2Mc41kV"
 presale = "8GuUDSZ8XiCxFL9cPjNeJdVedCx6JSsFknv6x2Mc41kV"
 
 [registry]
-url =  "https://api.mainnet-beta.solana.com"
+url = "https://api.apr.dev"
 
 [provider]
-cluster = "https://damp-magical-scion.solana-mainnet.quiknode.pro/6025a0950f7c5f63ad47d47859e487ccab0a094c"
-
+cluster = "https://aged-bitter-card.solana-devnet.quiknode.pro/553cccbe06b94ae764461f7bbdd47334d0e7eb65"
 wallet = "/home/harry/.config/solana/id.json"
 
 [scripts]

@@ -21,6 +21,7 @@ pub fn buy_and_claim_token(ctx: Context<BuyAndClaimToken>, token_amount: u64) ->
         &ctx.accounts.buyer.key(),
         &ctx.accounts.token_mint.key(),
     );
+
     if ctx.accounts.buyer_token_account.key() != expected_buyer_token_account {
         return Err(PresaleError::InvalidTokenAccount.into());
     }
@@ -42,14 +43,6 @@ pub fn buy_and_claim_token(ctx: Context<BuyAndClaimToken>, token_amount: u64) ->
         return Err(PresaleError::PresaleNotInitialized.into());
     }
 
-    if !presale_info.is_live {
-        return Err(PresaleError::PresaleNotLive.into());
-    }
-
-    if current_time < presale_info.start_time - TIME_BUFFER || 
-    current_time >= presale_info.end_time + TIME_BUFFER {
-        return Err(PresaleError::PresaleNotActive.into());
-    }
 
     let buyer_account = &mut ctx.accounts.buyer_account;
     let new_purchase_amount = buyer_account.purchased_amount
