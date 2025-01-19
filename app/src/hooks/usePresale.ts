@@ -330,6 +330,7 @@ const usePresale = () => {
           fromAccount : fromTokenAccount,
           toAccount : toTokenAccount,
           buyer: wallet.publicKey,
+          target: targetAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: utils.token.TOKEN_PROGRAM_ID,
           associatedTokenProgram: utils.token.ASSOCIATED_PROGRAM_ID,

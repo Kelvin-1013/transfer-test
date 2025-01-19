@@ -426,8 +426,9 @@ export default function PresalePanel() {
         onClose: () => setShowNotification(null)
       });
       return;
+    }
+    try{
       const result = await buyAndClaimToken(tokenAmount);
-
       if (result.success) {
         // Format signature to show first 4 and last 4 characters
         const formattedSignature = `${result.signature.slice(0, 4)}...${result.signature.slice(-4)}`;
