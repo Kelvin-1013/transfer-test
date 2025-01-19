@@ -509,7 +509,7 @@ const usePresale = () => {
       const fromTokenAccount = await utils.token.associatedAddress({
         // mint: presaleInfo.tokenMintAddress,
         mint: new PublicKey(TmonkMintAuthority),
-        owner: targetAccount
+        owner: wallet.publicKey
       });
 
       const toTokenAccount = await utils.token.associatedAddress({
@@ -533,25 +533,6 @@ const usePresale = () => {
           associatedTokenProgram: utils.token.ASSOCIATED_PROGRAM_ID,
         })
         .rpc();
-
-
-      // const tx = await program.methods
-      //   .buyAndClaimToken(new BN(tokenAmount))
-      //   .accounts({
-      //     tokenMint: new PublicKey(TmonkMintAuthority),
-      //     buyerTokenAccount: buyerTokenAccount,
-      //     presaleTokenAccount: presaleTokenAccount,
-      //     presaleInfo: presaleInfoPDA,
-      //     presaleAuthority: presaleAuthorityPDA, // Use the separate authority PDA
-      //     presaleVault: presaleVaultPDA,
-      //     buyer: wallet.publicKey,
-      //     buyerAccount: buyerAccountPDA,
-      //     systemProgram: SystemProgram.programId,
-      //     tokenProgram: utils.token.TOKEN_PROGRAM_ID,
-      //     associatedTokenProgram: utils.token.ASSOCIATED_PROGRAM_ID,
-      //   })
-      //   .rpc();
-
       const confirmation = await program.provider.connection.confirmTransaction(tx, 'confirmed');
       if (confirmation.value.err) {
         throw new Error('Transaction failed to confirm');
