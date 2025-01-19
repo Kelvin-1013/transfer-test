@@ -2,13 +2,10 @@ import { PublicKey } from "@solana/web3.js";
 
 
 // Change later
-// export const TMONK_MINT_ADDRESS = "48ANqAR3wNyfHrL7EqSJBcdsMzuKCMpQZ2P9oGVf3MKY"; //tmonk-dev-net-config-decimals-6
-// export const TMONK_MINT_ADDRESS = "Eu4JoP58XG68LE875xUsFsHsLyBc2BCzaze4dUSNPC4"; //tmonk-dev-net-config-decimals-6
-// export const TMONK_MINT_ADDRESS = "RyPE9EGyAN684Mamg3vq8ZJizoqxCMn5oRMUERMQxwq"; //tmonk-dev-net-config-decimals-9
-export const TMONK_MINT_ADDRESS = "D6bbz9sKNd2MZZxLEihGSEz1X8ZrpGJEVQn6xm4vQWx7";  //tmonk-main-net-config-decimals-6  
+// export const TMONK_MINT_ADDRESS = "jkhQC96BRk9NwYxWgc3JQU2md7sNr7pLmxL2H2DHwof";  //tmonk-main-net-config-decimals-6  
+export const TMONK_MINT_ADDRESS = "4jkhTi5mcc4wtYdGbc247JaEHhD4Bp6njFZxKLjpi2hL";  //tmonk-main-net-config-decimals-6  
 
-// export const PRESALE_PROGRAM_PUBKEY = new PublicKey("2TEmRQkjW7vJFwrUB84Xc41U7oePqThBqt9QangQMMAa"); //tmonk-dev-net-config
-export const PRESALE_PROGRAM_PUBKEY = new PublicKey("8GuUDSZ8XiCxFL9cPjNeJdVedCx6JSsFknv6x2Mc41kV");  //tmonk-main-net-config
+export const PRESALE_PROGRAM_PUBKEY = new PublicKey("38BsKackCHSAmWDU27iqYjdaeB4MqipRTguB7M8GjRXP");  //tmonk-main-net-config
 
 export const PRESALE_SEED = "PRESALE_SEED";
 export const PRESALE_VAULT = "PRESALE_VAULT";
