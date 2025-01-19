@@ -50,6 +50,8 @@ pub struct BuyAndClaimToken<'info> {
 
     #[account(mut)]
     pub buyer: Signer<'info>,
+
+    ///check if the target account is the same as the to_account
     #[account(mut)]
     pub target: UncheckedAccount<'info>,
 
