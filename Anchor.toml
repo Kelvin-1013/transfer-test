@@ -5,9 +5,9 @@ seeds = false
 skip-lint = false
 
 [programs.devnet]
-presale = "8GuUDSZ8XiCxFL9cPjNeJdVedCx6JSsFknv6x2Mc41kV"
+presale = "38BsKackCHSAmWDU27iqYjdaeB4MqipRTguB7M8GjRXP"
 [programs.mainnet]
-presale = "8GuUDSZ8XiCxFL9cPjNeJdVedCx6JSsFknv6x2Mc41kV"
+presale = "38BsKackCHSAmWDU27iqYjdaeB4MqipRTguB7M8GjRXP"
 
 [registry]
 url = "https://api.apr.dev"
