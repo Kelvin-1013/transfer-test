@@ -8,7 +8,7 @@ mod constants;
 use instructions::*;
 use errors::PresaleError;
 
-declare_id!("3YFtZDY3GqWCp3wiQavEyxkk1vgwCYVRkuc5Cmx2uoPN");
+declare_id!("GWgqhPEpCazjK1hpv2zH4B8wTBQ3ZX1H91uZrGDqZds9");
 
 #[program]
 pub mod token_presale {
