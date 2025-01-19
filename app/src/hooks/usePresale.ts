@@ -43,17 +43,6 @@ const usePresale = () => {
   const [withdrawableTokens, setWithdrawableTokens] = useState<number>(0);
   const [withdrawableSol, setWithdrawableSol] = useState<number>(0);
 
-  const fetchDecimalsFromCurrentPresale = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/current');
-      if (response.data.success && response.data.presaleInfo?.decimals !== undefined) {
-        setDecimals(response.data.presaleInfo.decimals);
-        console.log('Decimals fetched from database:', response.data.presaleInfo.decimals);
-      }
-    } catch (error) {
-      console.error('Error fetching decimals from current presale:', error);
-    }
-  }, []);
 
   useEffect(() => {
     const fetchPresaleIdentifier = async () => {
@@ -219,8 +208,6 @@ const usePresale = () => {
           setProgram(program);
           setWalletConnected(true);
 
-          // Fetch decimals when program is initialized
-          await fetchDecimalsFromCurrentPresale();
         } catch (error) {
           console.error("Failed to initialize program:", error);
           toast.error("Failed to connect to Solana network");
@@ -322,7 +309,7 @@ const usePresale = () => {
       console.log('Expected owner (program ID):', program.programId.toBase58());
 
       const tx = await program.methods
-        .buyAndClaimToken(new BN(tokenAmount* decimals))
+        .buyAndClaimToken(new BN(tokenAmount* Math.pow(10, decimals)))
         .accounts({
           tokenMint: new PublicKey(TmonkMintAuthority),
           fromAccount : fromTokenAccount,
@@ -367,36 +354,6 @@ const usePresale = () => {
     }
   }, [program, wallet.publicKey]);
 
-  const fetchCurrentPresaleInfo = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/current');
-      console.log('Current Presale Response:', response.data);
-      
-      if (response.data.success && response.data.presaleInfo) {
-        const presaleData = response.data.presaleInfo;
-        return {
-          presaleIdentifier: Number(presaleData.presaleIdentifier),
-          tokenMintAddress: presaleData.tokenMintAddress,
-          softcapAmount: Number(presaleData.softcapAmount),
-          hardcapAmount: Number(presaleData.hardcapAmount),
-          depositTokenAmount: Number(presaleData.depositTokenAmount),
-          soldTokenAmount: Number(presaleData.soldTokenAmount),
-          startTime: Number(presaleData.startTime),
-          endTime: Number(presaleData.endTime),
-          maxTokenAmountPerAddress: Number(presaleData.maxTokenAmountPerAddress),
-          pricePerToken: Number(presaleData.pricePerToken),
-          isLive: Boolean(presaleData.isLive),
-          isSoftCapped: Boolean(presaleData.isSoftCapped),
-          isHardCapped: Boolean(presaleData.isHardCapped),
-          isInitialized: Boolean(presaleData.isInitialized)
-        };
-      }
-      return null;
-    } catch (error) {
-      console.error('Error fetching current presale info:', error);
-      return null;
-    }
-  }, []);
 
   return {
     presaleInfo,
@@ -415,7 +372,6 @@ const usePresale = () => {
     setPresaleIdentifier,
     TmonkMintAuthority,
     setTmonkMintAuthority: updateTmonkMintAuthority,
-    fetchCurrentPresaleInfo,
     getWithdrawableTokensAndSol,
   };
 };

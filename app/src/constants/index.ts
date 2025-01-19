@@ -3,9 +3,9 @@ import { PublicKey } from "@solana/web3.js";
 
 // Change later
 // export const TMONK_MINT_ADDRESS = "jkhQC96BRk9NwYxWgc3JQU2md7sNr7pLmxL2H2DHwof";  //tmonk-main-net-config-decimals-6  
-export const TMONK_MINT_ADDRESS = "4jkhTi5mcc4wtYdGbc247JaEHhD4Bp6njFZxKLjpi2hL";  //tmonk-main-net-config-decimals-6  
+export const TMONK_MINT_ADDRESS = "4rks3XKKzBKGR6Pxjj7p4SBeExB8hWmQ22B9QehViJJu";  //tmonk-main-net-config-decimals-6  
 
-export const PRESALE_PROGRAM_PUBKEY = new PublicKey("HB72YReXVdk2gKXcZq96YWvbB1NThuswEtwNGz3FEsXm");  //tmonk-main-net-config
+export const PRESALE_PROGRAM_PUBKEY = new PublicKey("3gxPKpDiP4x1P37yJXbK9npwhk8sZf3kQLk87urS4FQm");  //tmonk-main-net-config
 
 export const PRESALE_SEED = "PRESALE_SEED";
 export const PRESALE_VAULT = "PRESALE_VAULT";
