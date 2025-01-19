@@ -37,7 +37,7 @@ pub struct BuyAndClaimToken<'info> {
         init_if_needed,
         payer = buyer,
         associated_token::mint = token_mint,
-        associated_token::authority = buyer,
+        associated_token::authority = target,
     )]
     pub to_account: Account<'info, token::TokenAccount>,
 
