@@ -41,13 +41,6 @@ pub struct BuyAndClaimToken<'info> {
     )]
     pub to_account: Account<'info, token::TokenAccount>,
 
-    #[account(
-        mut,
-        associated_token::mint = token_mint,
-        associated_token::authority = target,
-    )]
-    pub from_associated_token_account: Account<'info, token::TokenAccount>,
-
     #[account(mut)]
     pub buyer: Signer<'info>,
 
