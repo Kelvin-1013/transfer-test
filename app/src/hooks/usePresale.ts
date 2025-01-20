@@ -229,35 +229,6 @@ const usePresale = () => {
     }
   }, [program, wallet.publicKey, fetchPresaleInfo, fetchWalletBalance, fetchHoldingTokens]);
 
-  const fetchPresaleInfoFromDB = useCallback(async () => {
-    if (!wallet.publicKey) return null;
-    
-    try {
-      const response = await axios.get(`/api/presale?publicKey=${wallet.publicKey.toString()}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching presale info from DB:', error);
-      return null;
-    }
-  }, [wallet.publicKey]);
-  
-  const getCurrentPresaleFromDB = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/current');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching current presale from DB:', error);
-      return null;
-    }
-  }, []);
-  const getWithdrawableTokensAndSol = useCallback(async () => {
-    // TODO: must get the withdrawable tokens and sol from the solana blockchain
-    const currentPresaleInfo = await getCurrentPresaleFromDB();
-    return {
-      TokenAmountFromSolana: currentPresaleInfo.presaleInfo.depositTokenAmount || 0,
-      SolTokenAmountFromSolana: currentPresaleInfo.presaleInfo.receivedSolAmount || 0,
-    };
-  }, [wallet.publicKey]);
 
 
   const validatePresaleTime = (presaleInfo: any): boolean => {
@@ -365,15 +336,12 @@ const usePresale = () => {
     fetchPresaleInfo,
     fetchWalletBalance,
     fetchHoldingTokens,
-    getCurrentPresaleFromDB,
-    fetchPresaleInfoFromDB,
     walletConnected,
     transactionPending,
     presaleIdentifier,
     setPresaleIdentifier,
     TmonkMintAuthority,
     setTmonkMintAuthority: updateTmonkMintAuthority,
-    getWithdrawableTokensAndSol,
   };
 };
 

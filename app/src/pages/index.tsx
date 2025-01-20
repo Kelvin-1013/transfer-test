@@ -6,12 +6,6 @@ import Footer from '../components/basic/BasicFooter';
 import Navbar from '../components/basic/BasicNavbar';
 import ScrollToTop from '../components/other/ScrollToTopButton';
 import Head from 'next/head';
-import AboutSection from '../components/about/AboutSection';
-import { useRouter } from 'next/router';
-import Roadmap from '../components/roadmap';
-import CarouselImage from "../components/carousel/carousel";
-import ButtonAnimation from "../components/buttonAnimation/Button";
-import AdminAdrop from '../components/admin/AdminAirdrop';
 import Landing from "../components/landing";
 
 
@@ -50,15 +44,10 @@ function Home() {
           {!isAdmin && (
             <>
               <Landing/>
-              <ButtonAnimation />
-              <CarouselImage />
-              <Roadmap />
-              <FaqSection />
             </>
           )}
           {isAdmin && (
             <>
-              <AboutSection />
               {/* <AdminAdrop /> */}
             </>
           )}
